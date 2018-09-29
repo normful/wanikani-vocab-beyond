@@ -5,4 +5,4 @@ const isDebug: boolean = process.env.NODE_ENV !== "production";
 http.setConfig({ debug: isDebug });
 
 const app = new App();
-app.addEventListeners();
+app.init();

@@ -1,40 +1,20 @@
-const Window = require('window');
+export type windowGetter = () => any;
 
-export function dummyFunc() {
-  return 'this should work';
+export function getWindow(): any {
+  return global;
 }
 
-export function runningInNodeJs() {
-  return typeof global !== 'undefined';
-}
-
-export function getWindow() {
-  if (runningInNodeJs()) {
-    return new Window();
-  } else {
-    return window;
-  }
-}
+export type windowObjReceiver = (windowPropVal: object) => void;
+type timeoutCallback = () => void;
 
 export function waitUntilWindowPropLoads(
-  getWindowFunc,
-  windowProp,
-  pollingIntervalMs,
-  maxWaitMs,
-  onLoad,
-  onTimeout
-) {
-  if (
-    typeof getWindowFunc !== 'function' ||
-    typeof windowProp !== 'string' ||
-    typeof pollingIntervalMs !== 'number' ||
-    typeof maxWaitMs !== 'number' ||
-    typeof onLoad !== 'function' ||
-    typeof onTimeout !== 'function'
-  ) {
-    throw new Error('invalid argument');
-  }
-
+  getWindowFunc: windowGetter,
+  windowProp: string,
+  pollingIntervalMs: number,
+  maxWaitMs: number,
+  onLoad: windowObjReceiver,
+  onTimeout: timeoutCallback
+): void {
   const startMs = new Date().getTime();
 
   const intervalID = setInterval(() => {
@@ -50,4 +30,3 @@ export function waitUntilWindowPropLoads(
     }
   }, pollingIntervalMs);
 }
-

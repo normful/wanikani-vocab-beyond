@@ -39,7 +39,7 @@ module.exports = {
     }),
     new webpack.BannerPlugin({
       banner: `// ==UserScript==
-// @name              ${pkg.name}
+// @name              WaniKani Vocab Beyond
 // @author            ${pkg.author}
 // @description       ${pkg.description}
 // @version           ${pkg.version}
