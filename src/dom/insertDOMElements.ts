@@ -1,6 +1,6 @@
 import { IWKOFSettings } from "../wkof/wkofConstants";
 import { PageType, determinePageType } from "./../urlHelpers/determinePageType";
-import { sectionHeaderID, sectionID } from "./domIDs";
+import { sectionHeaderID, sectionID } from "./domConstants";
 import { Logger } from "../logger/logger";
 
 const Log = new Logger(false);
