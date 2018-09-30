@@ -2,7 +2,7 @@ import http from "gm-http";
 import { Logger } from "../logger/logger";
 import { IWKOFSettings } from "../wkof/wkofConstants";
 
-const Log = new Logger(false);
+const Log = new Logger();
 
 export function getWordPronunciations(
   jpWord: string,

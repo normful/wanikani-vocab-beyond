@@ -3,7 +3,7 @@
 // @author            Norman Sue
 // @description       Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.
 // @version           0.4.0
-// @update            9/30/2018, 3:43:49 AM
+// @update            9/30/2018, 12:21:11 PM
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
@@ -109,8 +109,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var gm_http_1 = __webpack_require__(1);
 var app_1 = __webpack_require__(2);
-var isDebug = "none" !== "production";
-gm_http_1.default.setConfig({ debug: isDebug });
+// Set `debug: true` to enable GM.xmlHttpRequest logging
+gm_http_1.default.setConfig({ debug: false });
 var app = new app_1.App();
 app.init();
 
@@ -356,7 +356,7 @@ var appConstants_1 = __webpack_require__(5);
 var insertInitialDOMElements_1 = __webpack_require__(6);
 var waitForWkof_1 = __webpack_require__(21);
 var wkofConstants_1 = __webpack_require__(24);
-var Log = new logger_1.Logger(false);
+var Log = new logger_1.Logger();
 function runAllWkofDependentCode() {
     waitForWkof_1.waitForWkof(appConstants_1.prettyScriptName, function (wkof) {
         wkof.include("Menu,Settings");
@@ -374,142 +374,8 @@ function runAllWkofDependentCode() {
     });
 }
 exports.runAllWkofDependentCode = runAllWkofDependentCode;
-var wkofSettingsMenuConfig = {
-    script_id: wkofConstants_1.SettingsScriptId,
-    title: "WaniKani Vocab Beyond",
-    autosave: true,
-    background: false,
-    content: {
-        forvo_page_id: {
-            type: "page",
-            label: "Audio",
-            hover_tip: "Settings for Forvo.com audio pronunciations",
-            content: {
-                forvo_instructions: {
-                    type: "html",
-                    html: "<p><a href='https://forvo.com' target='_blank'>Forvo.com</a> has an audio collection of words pronounced by native Japanese speakers.</p>" +
-                        "<p>To enable Forvo pronunciations of vocabulary words:</p>" +
-                        "<p>1. <a href='https://forvo.com/signup/' target='_blank'>Sign up for a Forvo.com account</a></p>" +
-                        "<p>2. <a href='https://api.forvo.com/plans-and-pricing' target='_blank'>Purchase an API key here</a></p>" +
-                        "<p>3. Enter your key below</p>"
-                },
-                forvo_api_key: {
-                    type: "text",
-                    label: "Forvo API key",
-                    full_width: true,
-                    hover_tip: "Your API key from https://api.forvo.com/"
-                },
-                forvo_caveat: {
-                    type: "html",
-                    html: "<p>(WaniKani Vocab Beyond will work without a Forvo API key, but audio for vocabulary won't be shown.)</p>"
-                },
-                forvo_divider_id: {
-                    type: "divider"
-                },
-                forvo_rating_instructions: {
-                    type: "html",
-                    html: "<p>Forvo pronunciations are voted on by users. Limit displayed audio to at least this overall rating. Zero is the default and recommended value.</p>"
-                },
-                forvo_min_rating: {
-                    type: "number",
-                    label: "Minimum Forvo rating",
-                    hover_tip: "Only show Forvo pronunciations with at least this rating",
-                    placeholder: "0",
-                    default: 0,
-                    full_width: false
-                },
-                forvo_divider_id_2: {
-                    type: "divider"
-                },
-                forvo_whitelist_instructions: {
-                    type: "html",
-                    html: "<p>Comma-separated list of Forvo users whose pronunciations should be shown. If blank, pronunciations from all users are shown.</p>"
-                },
-                forvo_username_whitelist_csv: {
-                    type: "text",
-                    label: "Favorite Forvo users",
-                    full_width: true,
-                    placeholder: "Example: skent, usako_usagiclub, strawberrybrown",
-                    default: "",
-                    hover_tip: "A comma-separated list of Forvo usernames whose pronunciations should be shown"
-                }
-            }
-        },
-        vocab_page_id: {
-            type: "page",
-            label: "Vocab",
-            hover_tip: "Settings for WWWJDIC vocabulary words",
-            content: {
-                vocab_instructions_1: {
-                    type: "html",
-                    html: "<p>By default, only common words are retrieved and displayed from <a href='http://nihongo.monash.edu/cgi-bin/wwwjdic' target='_blank'>WWWJDIC</a>. You can also retrieve uncommon words and phrases by checking the box below.</p>"
-                },
-                show_all_wwwjdic_vocab: {
-                    type: "checkbox",
-                    label: "Show uncommon vocab",
-                    hover_tip: "Show both common and uncommon WWWJDIC vocab",
-                    default: false,
-                    full_width: false
-                },
-                vocab_instructions_2: {
-                    type: "html",
-                    html: "<p>Set the maximum number of WWWJDIC vocab to display per kanji below. 0 means unlimited. (Warning: showing WWWJDIC unlimited results may quickly exhaust your Forvo API key's daily request limits.)</p>"
-                },
-                max_wwwjdic_vocab_shown: {
-                    type: "number",
-                    label: "Maximum number of WWWJDIC vocab to display per kanji",
-                    hover_tip: "Maximum number of WWWJDIC vocabulary to display per kanji",
-                    full_width: true,
-                    placeholder: "15",
-                    default: 15,
-                    min: 0
-                }
-            }
-        },
-        appearance_page_id: {
-            type: "page",
-            label: "Appearance",
-            hover_tip: "Appearance settings",
-            content: {
-                appearance_instructions_1: {
-                    type: "html",
-                    html: "<p>Check the box below to display the Vocab Beyond section at the top of the page, instead of the bottom.</p>"
-                },
-                show_vocab_beyond_at_top: {
-                    type: "checkbox",
-                    label: "Show Vocab Beyond at top",
-                    hover_tip: "Show the Vocab Beyond section at the top of lessons, reviews, and kanji pages",
-                    default: false,
-                    full_width: false
-                },
-                appearance_instructions_2: {
-                    type: "html",
-                    html: "<p>Check the box below to show Forvo usernames above audio clips.</p>"
-                },
-                show_forvo_usernames: {
-                    type: "checkbox",
-                    label: "Show Forvo usernames",
-                    hover_tip: "Show Forvo usernames above each audio clip",
-                    default: false,
-                    full_width: false
-                },
-                appearance_instructions_3: {
-                    type: "html",
-                    html: "<p>Check the box below to hide the icon beside uncommon vocab.</p>"
-                },
-                hide_uncommon_indicator: {
-                    type: "checkbox",
-                    label: "Hide uncommon icon",
-                    hover_tip: "Hide uncommon vocabulary icon",
-                    default: false,
-                    full_width: false
-                }
-            }
-        }
-    }
-};
 function onSettingsMenuLinkClick(wkof) {
-    var dialog = new wkof.Settings(__assign({}, wkofSettingsMenuConfig, { on_save: onSettingsSave.bind(null, wkof) }));
+    var dialog = new wkof.Settings(__assign({}, wkofConstants_1.WkofSettingsMenuConfig, { on_save: onSettingsSave.bind(null, wkof) }));
     dialog.open();
 }
 function onSettingsSave(wkof) {
@@ -528,9 +394,9 @@ function onSettingsSave(wkof) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var logPrefix = "[WKVB] ";
 var Logger = /** @class */ (function () {
-    function Logger(disableLogging) {
+    function Logger() {
         this.prefix = logPrefix;
-        this.disableLogging = disableLogging;
+        this.disableLogging = true; // Set to false for development
     }
     Logger.prototype.debug = function (msg) {
         var args = [];
@@ -598,11 +464,11 @@ var logger_1 = __webpack_require__(4);
 var determinePageType_1 = __webpack_require__(7);
 var domConstants_1 = __webpack_require__(8);
 var queryWwwjdicThenInsertParsedResults_1 = __webpack_require__(9);
-var Log = new logger_1.Logger(false);
+var Log = new logger_1.Logger();
 function insertInitialDOMElements(settings) {
     Log.debug("insertInitialDOMElements called");
     var pageType = determinePageType_1.determinePageType(document.URL);
-    if (pageType === determinePageType_1.PageType.kanji && !settings.show_vocab_beyond_at_top) {
+    if (pageType === determinePageType_1.PageType.kanji && !settings.show_vocab_beyond_first) {
         insertPageListHeaderLink();
     }
     maybeLoadVocabDependingOnPage(pageType, settings);
@@ -696,7 +562,7 @@ function maybeInsertEmptyVocabSectionOnce(settings) {
         if (pageType === determinePageType_1.PageType.kanji) {
             Log.debug("maybeInsertEmptyVocabSectionOnce inserting for kanji page");
             var informationSection = $("#information");
-            if (settings.show_vocab_beyond_at_top) {
+            if (settings.show_vocab_beyond_first) {
                 $(sectionHTML).insertAfter(informationSection);
             }
             else {
@@ -706,7 +572,7 @@ function maybeInsertEmptyVocabSectionOnce(settings) {
         }
         else if (pageType === determinePageType_1.PageType.reviews) {
             Log.debug("maybeInsertEmptyVocabSectionOnce inserting for reviews page");
-            if (settings.show_vocab_beyond_at_top) {
+            if (settings.show_vocab_beyond_first) {
                 $("#item-info-col2").prepend(sectionHTML);
             }
             else {
@@ -715,7 +581,7 @@ function maybeInsertEmptyVocabSectionOnce(settings) {
         }
         else if (pageType === determinePageType_1.PageType.lessons) {
             Log.debug("maybeInsertEmptyVocabSectionOnce inserting for lessons page");
-            if (settings.show_vocab_beyond_at_top) {
+            if (settings.show_vocab_beyond_first) {
                 $("#supplement-kan-breakdown .col1").append(sectionHTML);
             }
             else {
@@ -798,7 +664,7 @@ var getKanji_1 = __webpack_require__(10);
 var makeWwwjdicUrl_1 = __webpack_require__(11);
 var parsing_1 = __webpack_require__(12);
 var insertForvoAudioForWord_1 = __webpack_require__(19);
-var Log = new logger_1.Logger(false);
+var Log = new logger_1.Logger();
 var cachedSections = {};
 var DISABLE_FORVO = false;
 function queryWwwjdicThenInsertParsedResults(settings, emptySection) {
@@ -912,16 +778,17 @@ function onWwwJdicResponse(res, section, showMessage, settings, kanji) {
                 fontSize: "12px",
                 height: "22px",
                 width: "22px",
-                top: "4px",
-                left: "-30px",
-                margin: "-0.6px",
+                top: "0",
+                left: "-25px",
+                margin: "0",
+                padding: "0",
                 boxSizing: "border-box",
                 borderRadius: "50%",
                 textAlign: "center",
-                verticalAlign: "middle",
+                lineHeight: "22px",
                 textShadow: "0.7px 0.2px 4.1px #FFF9DE",
                 backgroundColor: "#E38B32",
-                boxShadow: "0 -3.5px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)",
+                boxShadow: "0 -3px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)",
                 color: "#F41300",
                 zIndex: "999"
             });
@@ -1118,15 +985,10 @@ function parseLines(lines) {
             definitions.push(definition_line_1.formatDefinitionLine(english));
         }
         return {
-            // Japanese text header, formatted, with WWWJDIC dictionary codes expanded
             jp: vocab_header_1.formatVocabHeader(vocabHeader),
-            // Part of speech, fully expanded
             pos: part_of_speech_1.formatPartOfSpeech(partOfSpeech),
-            // Boolean indicating whether it is a common entry or not
             cm: isCommon,
-            // Array of English definition lines, with WWWJDIC dictionary codes expanded
             en: definitions,
-            // The first-listed vocabulary to query Forvo with
             q: extractVocab(vocabHeader)
         };
     });
@@ -1395,14 +1257,16 @@ exports.DICT_CODES = {
 
 "use strict";
 
+/* tslint:disable:no-console */
 Object.defineProperty(exports, "__esModule", { value: true });
 var dict_codes_1 = __webpack_require__(15);
 // 3040-309F: hiragana
 // 30A0-30FF: katakana
 // 4E00-9FAF: common and uncommon kanji
-var kanjiAndCodeSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)\(([a-z,A-Z-,0-9]+)\)$/;
-var codeSplitter = /^(.*)\(([a-z,A-Z-,0-9]+)\)$/;
+var kanjiAndCodeSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)\(([a-zA-Z0-9,]+)\)$/;
+var codeSplitter = /^(.*)\(([a-zA-Z0-9,]+)\)$/;
 var kanjiSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)$/;
+var kanjiAndParenthesizedCsvSplitter = /^([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF,]+)\)/;
 function formatPronunciation(pronunciation) {
     var parts = pronunciation.split(";");
     var mapped = parts
@@ -1417,9 +1281,21 @@ function formatPronunciation(pronunciation) {
                 (dict_codes_1.DICT_CODES[kcm[3]] || kcm[3]) +
                 ")");
         }
+        var kp = part.match(kanjiAndParenthesizedCsvSplitter);
+        if (kp) {
+            return kp[1] + "⸨" + kp[2].replace(",", "、") + "⸩";
+        }
         var cm = part.match(codeSplitter);
         if (cm) {
-            return cm[1] + "(" + (dict_codes_1.DICT_CODES[cm[2]] || cm[2]) + ")";
+            var code = cm[2];
+            var expandedCode = code;
+            if (code === "P") {
+                expandedCode = "common";
+            }
+            else if (dict_codes_1.DICT_CODES[code]) {
+                expandedCode = dict_codes_1.DICT_CODES[code];
+            }
+            return cm[1] + "(" + expandedCode + ")";
         }
         var km = part.match(kanjiSplitter);
         if (km) {
@@ -1522,7 +1398,7 @@ function replaceAbbreviations(text) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var logger_1 = __webpack_require__(4);
 var getWordPronunciations_1 = __webpack_require__(20);
-var Log = new logger_1.Logger(false);
+var Log = new logger_1.Logger();
 var forvoUserWhitelist = [""];
 var EMPTY_FORVO_USER_WHITELIST = JSON.stringify(forvoUserWhitelist);
 function populateForvoUserWhitelist(settings) {
@@ -1627,7 +1503,7 @@ function handleForvoSuccess(responseText, settings, destAppendee) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var gm_http_1 = __webpack_require__(1);
 var logger_1 = __webpack_require__(4);
-var Log = new logger_1.Logger(false);
+var Log = new logger_1.Logger();
 function getWordPronunciations(jpWord, settings) {
     if (!jpWord) {
         return Promise.reject(new Error("jpWord missing"));
@@ -1753,6 +1629,140 @@ module.exports = g;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SettingsScriptId = "wanikani_vocab_beyond_settings";
 exports.MenuScriptLinkId = "wanikani_vocab_beyond_settings_link";
+exports.WkofSettingsMenuConfig = {
+    script_id: exports.SettingsScriptId,
+    title: "WaniKani Vocab Beyond",
+    autosave: true,
+    background: false,
+    content: {
+        forvo_page_id: {
+            type: "page",
+            label: "Audio",
+            hover_tip: "Settings for Forvo.com audio pronunciations",
+            content: {
+                forvo_instructions: {
+                    type: "html",
+                    html: "<p><a href='https://forvo.com' target='_blank'>Forvo.com</a> has an audio collection of words pronounced by native Japanese speakers.</p>" +
+                        "<p>To enable Forvo pronunciations of vocabulary words:</p>" +
+                        "<p>1. <a href='https://forvo.com/signup/' target='_blank'>Sign up for a Forvo.com account</a></p>" +
+                        "<p>2. <a href='https://api.forvo.com/plans-and-pricing' target='_blank'>Purchase an API key here</a></p>" +
+                        "<p>3. Enter your key below</p>"
+                },
+                forvo_api_key: {
+                    type: "text",
+                    label: "Forvo API key",
+                    full_width: true,
+                    hover_tip: "Your API key from https://api.forvo.com/"
+                },
+                forvo_caveat: {
+                    type: "html",
+                    html: "<p>(WaniKani Vocab Beyond will work without a Forvo API key, but audio for vocabulary won't be shown.)</p>"
+                },
+                forvo_divider_id: {
+                    type: "divider"
+                },
+                forvo_rating_instructions: {
+                    type: "html",
+                    html: "<p>Forvo pronunciations are voted on by users. Limit displayed audio to at least this overall rating. Zero is the default and recommended value.</p>"
+                },
+                forvo_min_rating: {
+                    type: "number",
+                    label: "Minimum Forvo rating",
+                    hover_tip: "Only show Forvo pronunciations with at least this rating",
+                    placeholder: "0",
+                    default: 0,
+                    full_width: false
+                },
+                forvo_divider_id_2: {
+                    type: "divider"
+                },
+                forvo_whitelist_instructions: {
+                    type: "html",
+                    html: "<p>Comma-separated list of Forvo users whose pronunciations should be shown. If blank, pronunciations from all users are shown.</p>"
+                },
+                forvo_username_whitelist_csv: {
+                    type: "text",
+                    label: "Favorite Forvo users",
+                    full_width: true,
+                    placeholder: "Example: skent, usako_usagiclub, strawberrybrown",
+                    default: "",
+                    hover_tip: "A comma-separated list of Forvo usernames whose pronunciations should be shown"
+                }
+            }
+        },
+        vocab_page_id: {
+            type: "page",
+            label: "Vocab",
+            hover_tip: "Settings for WWWJDIC vocabulary words",
+            content: {
+                vocab_instructions_1: {
+                    type: "html",
+                    html: "<p>By default, only common words are retrieved and displayed from <a href='http://nihongo.monash.edu/cgi-bin/wwwjdic' target='_blank'>WWWJDIC</a>. You can also retrieve uncommon words and phrases by checking the box below.</p>"
+                },
+                show_all_wwwjdic_vocab: {
+                    type: "checkbox",
+                    label: "Show uncommon vocab",
+                    hover_tip: "Show both common and uncommon WWWJDIC vocab",
+                    default: false,
+                    full_width: false
+                },
+                vocab_instructions_2: {
+                    type: "html",
+                    html: "<p>Set the maximum number of WWWJDIC vocab to display per kanji below. 0 means unlimited. (Warning: showing WWWJDIC unlimited results may quickly exhaust your Forvo API key's daily request limits.)</p>"
+                },
+                max_wwwjdic_vocab_shown: {
+                    type: "number",
+                    label: "Maximum number of WWWJDIC vocab to display per kanji",
+                    hover_tip: "Maximum number of WWWJDIC vocabulary to display per kanji",
+                    full_width: true,
+                    placeholder: "15",
+                    default: 15,
+                    min: 0
+                }
+            }
+        },
+        appearance_page_id: {
+            type: "page",
+            label: "Appearance",
+            hover_tip: "Appearance settings",
+            content: {
+                appearance_instructions_1: {
+                    type: "html",
+                    html: "<p>Check to show Vocab Beyond at top of kanji pages and in first tab of kanji reviews and lessons.</p>"
+                },
+                show_vocab_beyond_first: {
+                    type: "checkbox",
+                    label: "Show Vocab Beyond first",
+                    hover_tip: "Show the Vocab Beyond section at the top of kanji pages and in the first tab of kanji reviews and kanji lessons",
+                    default: false,
+                    full_width: false
+                },
+                appearance_instructions_2: {
+                    type: "html",
+                    html: "<p>Check to show Forvo usernames above audio clips.</p>"
+                },
+                show_forvo_usernames: {
+                    type: "checkbox",
+                    label: "Show Forvo usernames",
+                    hover_tip: "Show Forvo usernames above each audio clip",
+                    default: false,
+                    full_width: false
+                },
+                appearance_instructions_3: {
+                    type: "html",
+                    html: "<p>Check below to hide icon beside uncommon vocab.</p>"
+                },
+                hide_uncommon_indicator: {
+                    type: "checkbox",
+                    label: "Hide uncommon icon",
+                    hover_tip: "Hide uncommon vocabulary icon",
+                    default: false,
+                    full_width: false
+                }
+            }
+        }
+    }
+};
 
 
 /***/ })

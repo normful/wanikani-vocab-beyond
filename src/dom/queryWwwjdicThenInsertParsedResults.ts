@@ -10,7 +10,7 @@ import {
   insertForvoAudioForWord
 } from "./insertForvoAudioForWord";
 
-const Log = new Logger(false);
+const Log = new Logger();
 
 const cachedSections = {};
 
@@ -188,17 +188,18 @@ function onWwwJdicResponse(
           fontSize: "12px",
           height: "22px",
           width: "22px",
-          top: "4px",
-          left: "-30px",
-          margin: "-0.6px",
+          top: "0",
+          left: "-25px",
+          margin: "0",
+          padding: "0",
           boxSizing: "border-box",
           borderRadius: "50%",
           textAlign: "center",
-          verticalAlign: "middle",
+          lineHeight: "22px",
           textShadow: "0.7px 0.2px 4.1px #FFF9DE",
           backgroundColor: "#E38B32",
           boxShadow:
-            "0 -3.5px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)",
+            "0 -3px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)",
           color: "#F41300",
           zIndex: "999"
         });

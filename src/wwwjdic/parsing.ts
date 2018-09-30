@@ -89,19 +89,10 @@ export function parseLines(lines: string[]): IRenderable[] {
     }
 
     return {
-      // Japanese text header, formatted, with WWWJDIC dictionary codes expanded
       jp: formatVocabHeader(vocabHeader),
-
-      // Part of speech, fully expanded
       pos: formatPartOfSpeech(partOfSpeech),
-
-      // Boolean indicating whether it is a common entry or not
       cm: isCommon,
-
-      // Array of English definition lines, with WWWJDIC dictionary codes expanded
       en: definitions,
-
-      // The first-listed vocabulary to query Forvo with
       q: extractVocab(vocabHeader)
     };
   });

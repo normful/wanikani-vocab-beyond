@@ -97,6 +97,19 @@ describe("parseLines", () => {
     }
   );
 
+  test(
+    "いささ小川;いさら小川;細小小川 [いささおがわ(いささ小川,細小小川);いさらおがわ(いさら小川,細小小川)] /(n) (arch) (obsc) trickling brook/",
+    {
+      jp:
+        "いささ小川、いさら小川、細小小川（いささおがわ⸨いささ小川、細小小川⸩、いさらおがわ⸨いさら小川、細小小川⸩）",
+      pos: "Noun",
+      cm: false,
+      en: ["[archaism] (obsc) trickling brook"],
+      q: "いささ小川"
+    }
+  );
+
+  // TODO: Finishg writing these additional cases
   // test(
   //   '以下(P);已下 [いか(P);いげ] /(n) (1) not exceeding/and downward/... and below/(2) below (e.g. standard)/under (e.g. a level)/(3) the below-mentioned/the following/the rest/(P)/'
   // );

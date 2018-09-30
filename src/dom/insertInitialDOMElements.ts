@@ -4,14 +4,14 @@ import { PageType, determinePageType } from "./../urlHelpers/determinePageType";
 import { sectionHeaderID, sectionID } from "./domConstants";
 import { queryWwwjdicThenInsertParsedResults } from "./queryWwwjdicThenInsertParsedResults";
 
-const Log = new Logger(false);
+const Log = new Logger();
 
 export function insertInitialDOMElements(settings: IWKOFSettings): void {
   Log.debug("insertInitialDOMElements called");
 
   const pageType = determinePageType(document.URL);
 
-  if (pageType === PageType.kanji && !settings.show_vocab_beyond_at_top) {
+  if (pageType === PageType.kanji && !settings.show_vocab_beyond_first) {
     insertPageListHeaderLink();
   }
 
@@ -136,7 +136,7 @@ function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): JQuery {
 
       const informationSection = $("#information");
 
-      if (settings.show_vocab_beyond_at_top) {
+      if (settings.show_vocab_beyond_first) {
         $(sectionHTML).insertAfter(informationSection);
       } else {
         const lastSection = informationSection.siblings().last();
@@ -145,7 +145,7 @@ function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): JQuery {
     } else if (pageType === PageType.reviews) {
       Log.debug("maybeInsertEmptyVocabSectionOnce inserting for reviews page");
 
-      if (settings.show_vocab_beyond_at_top) {
+      if (settings.show_vocab_beyond_first) {
         $("#item-info-col2").prepend(sectionHTML);
       } else {
         $("#item-info-col2").append(sectionHTML);
@@ -153,7 +153,7 @@ function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): JQuery {
     } else if (pageType === PageType.lessons) {
       Log.debug("maybeInsertEmptyVocabSectionOnce inserting for lessons page");
 
-      if (settings.show_vocab_beyond_at_top) {
+      if (settings.show_vocab_beyond_first) {
         $("#supplement-kan-breakdown .col1").append(sectionHTML);
       } else {
         $("#supplement-kan-related-vocabulary .col1").append(sectionHTML);

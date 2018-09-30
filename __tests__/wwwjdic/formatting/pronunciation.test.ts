@@ -21,6 +21,10 @@ describe("formatPronunciation", () => {
     );
   });
 
+  it("replaces P as common", () => {
+    expect(f("かわ(P);がわ")).toEqual("（かわ(common)、がわ）");
+  });
+
   it("replaces parentheses around kanji with double parentheses", () => {
     expect(f("てのひら;たなごころ(掌)")).toEqual(
       "（てのひら、たなごころ⸨掌⸩）"
@@ -30,6 +34,14 @@ describe("formatPronunciation", () => {
   it("replaces parentheses around multiple kanji followed by dictionary codes", () => {
     expect(f("とけい;ときはかり(時計)(ok)")).toEqual(
       "（とけい、ときはかり⸨時計⸩(outdated kana)）"
+    );
+  });
+
+  it("handles multiple parenthesized groups", () => {
+    expect(
+      f("いささおがわ(いささ小川,細小小川);いさらおがわ(いさら小川,細小小川)")
+    ).toEqual(
+      "（いささおがわ⸨いささ小川、細小小川⸩、いさらおがわ⸨いさら小川、細小小川⸩）"
     );
   });
 });
