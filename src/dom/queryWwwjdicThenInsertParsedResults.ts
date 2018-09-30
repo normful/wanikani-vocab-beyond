@@ -71,6 +71,8 @@ export function queryWwwjdicThenInsertParsedResults(
     });
 }
 
+let appendedForvoAttribution = false;
+
 function onWwwJdicResponse(
   res: string,
   section: JQuery,
@@ -250,11 +252,12 @@ function onWwwJdicResponse(
   );
 
   Promise.all(promises).then(() => {
-    if (!DISABLE_FORVO) {
+    if (!DISABLE_FORVO && !appendedForvoAttribution) {
       const forvoAttribution = $(
         '<p><a href="https://forvo.com/" target="_blank">Pronunciations by Forvo</a></p>'
       );
       section.append(forvoAttribution);
+      appendedForvoAttribution = true;
     }
 
     const sectionDeepClone = section.clone(true, true);
