@@ -1,9 +1,10 @@
 import { prettyScriptName } from "../appConstants";
+import { insertDOMElements } from "./../dom/insertDOMElements";
 import { waitForWkof } from "./waitForWkof";
 import {
   MenuScriptLinkId,
   SettingsScriptId,
-  WKOFSettings
+  IWKOFSettings
 } from "./wkofConstants";
 
 interface IWKOF {
@@ -33,7 +34,7 @@ export function runAllWkofDependentCode(): void {
       });
 
       wkof.Settings.load(SettingsScriptId).then(settings => {
-        doInsertIntoPage(settings);
+        insertDOMElements(settings);
       });
     });
   });
@@ -201,14 +202,7 @@ function onSettingsSave(wkof) {
   loadVocab(updatedSettings);
 }
 
-// TODO: Hook up these stubs with their implementations
-
-const doInsertIntoPage = (wkof: WKOFSettings) => {
-  // tslint:disable-next-line:no-console
-  console.log("doInsertIntoPage");
-};
-
-const loadVocab = (wkof: WKOFSettings) => {
+const loadVocab = (wkof: IWKOFSettings) => {
   // tslint:disable-next-line:no-console
   console.log("loadVocab");
 };
