@@ -1,5 +1,3 @@
-/* tslint:disable:object-literal-sort-keys */
-
 import { prettyScriptName } from "../appConstants";
 import { waitForWkof } from "./waitForWkof";
 import { MenuScriptLinkId, SettingsScriptId } from "./wkofConstants";

@@ -4,8 +4,11 @@
         "tslint:latest",
         "tslint-config-prettier"
     ],
-    "jsRules": {},
+    "jsRules": {
+        "object-literal-sort-keys": false
+    },
     "rules": {
+        "object-literal-sort-keys": false,
         "prettier": true
     },
     "rulesDirectory": ["tslint-plugin-prettier"]
