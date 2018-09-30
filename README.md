@@ -13,7 +13,7 @@ Vocab Beyond will still show WWWJDIC vocab, even if you don't configure it with 
 ## Requirements
 
 - [Tampermonkey](https://tampermonkey.net/)
-- [Forvo API key](https://api.forvo.com)
+- [Forvo API key](https://api.forvo.com) (optional)
 
 ## Installation
 
