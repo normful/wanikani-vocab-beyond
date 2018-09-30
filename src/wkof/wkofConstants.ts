@@ -133,22 +133,21 @@ export const WkofSettingsMenuConfig = {
         appearance_instructions_1: {
           type: "html",
           html:
-            "<p>Check the box below to display the Vocab Beyond section at the top of the page, instead of the bottom.</p>"
+            "<p>Check to show Vocab Beyond at top of kanji pages and in first tab of kanji reviews and lessons.</p>"
         },
 
         show_vocab_beyond_first: {
           type: "checkbox",
-          label: "Show Vocab Beyond at top",
+          label: "Show Vocab Beyond first",
           hover_tip:
-            "Show the Vocab Beyond section at the top of lessons, reviews, and kanji pages",
+            "Show the Vocab Beyond section at the top of kanji pages and in the first tab of kanji reviews and kanji lessons",
           default: false,
           full_width: false
         },
 
         appearance_instructions_2: {
           type: "html",
-          html:
-            "<p>Check the box below to show Forvo usernames above audio clips.</p>"
+          html: "<p>Check to show Forvo usernames above audio clips.</p>"
         },
 
         show_forvo_usernames: {
@@ -161,8 +160,7 @@ export const WkofSettingsMenuConfig = {
 
         appearance_instructions_3: {
           type: "html",
-          html:
-            "<p>Check the box below to hide the icon beside uncommon vocab.</p>"
+          html: "<p>Check below to hide icon beside uncommon vocab.</p>"
         },
 
         hide_uncommon_indicator: {
