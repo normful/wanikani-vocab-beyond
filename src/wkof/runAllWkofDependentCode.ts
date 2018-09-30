@@ -40,7 +40,7 @@ export function runAllWkofDependentCode(): void {
   });
 }
 
-export const WkofSettingsMenuConfig = {
+const wkofSettingsMenuConfig = {
   script_id: SettingsScriptId,
   title: "WaniKani Vocab Beyond",
   autosave: true,
@@ -191,7 +191,7 @@ export const WkofSettingsMenuConfig = {
 
 function onSettingsMenuLinkClick(wkof: IWKOF): void {
   const dialog = new wkof.Settings({
-    ...WkofSettingsMenuConfig,
+    ...wkofSettingsMenuConfig,
     on_save: onSettingsSave.bind(null, wkof)
   });
   dialog.open();
