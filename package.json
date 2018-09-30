@@ -8,7 +8,7 @@
     "build": "webpack --display-error-details --progress --colors",
     "watch": "webpack --display-error-details --progress --colors --watch",
     "prettier": "prettier --parser=typescript --write '**/*.ts'",
-    "lint": "tslint -c tslint.json '**/*.ts'"
+    "lint": "tslint --config tslint.json --project tsconfig.json"
   },
   "keywords": [
     "typescript",
