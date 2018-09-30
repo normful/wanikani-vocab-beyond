@@ -1,6 +1,13 @@
+import { IWKOFSettings } from "../wkof/wkofConstants";
+
 // When used in a userscript, xhrFunc should be GM_xmlhttpRequest
 // https://tampermonkey.net/documentation.php#GM_xmlhttpRequest
-export function wordPronunciations(xhrFunc, jpWord, settings) {
+// TODO: Integrate with gm-http, if necessary
+export function wordPronunciations(
+  xhrFunc: any,
+  jpWord: string,
+  settings: IWKOFSettings
+) {
   if (typeof xhrFunc !== "function") {
     return Promise.reject(new Error("xhrFunc must be a function"));
   }

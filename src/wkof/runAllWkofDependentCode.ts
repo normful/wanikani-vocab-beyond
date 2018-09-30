@@ -1,6 +1,11 @@
 import { prettyScriptName } from "../appConstants";
+import { insertDOMElements } from "./../dom/insertDOMElements";
 import { waitForWkof } from "./waitForWkof";
-import { MenuScriptLinkId, SettingsScriptId } from "./wkofConstants";
+import {
+  MenuScriptLinkId,
+  SettingsScriptId,
+  IWKOFSettings
+} from "./wkofConstants";
 
 interface IWKOF {
   include: (modulesCsv: string) => void;
@@ -16,8 +21,6 @@ interface IWKOFMenuModule {
   insert_script_link: (opts: object) => void;
 }
 
-type WKOFSettings = object;
-
 export function runAllWkofDependentCode(): void {
   waitForWkof(prettyScriptName, (wkof: IWKOF) => {
     wkof.include("Menu,Settings");
@@ -31,13 +34,13 @@ export function runAllWkofDependentCode(): void {
       });
 
       wkof.Settings.load(SettingsScriptId).then(settings => {
-        doInsertIntoPage(settings);
+        insertDOMElements(settings);
       });
     });
   });
 }
 
-export const WkofSettingsMenuConfig = {
+const wkofSettingsMenuConfig = {
   script_id: SettingsScriptId,
   title: "WaniKani Vocab Beyond",
   autosave: true,
@@ -188,7 +191,7 @@ export const WkofSettingsMenuConfig = {
 
 function onSettingsMenuLinkClick(wkof: IWKOF): void {
   const dialog = new wkof.Settings({
-    ...WkofSettingsMenuConfig,
+    ...wkofSettingsMenuConfig,
     on_save: onSettingsSave.bind(null, wkof)
   });
   dialog.open();
@@ -199,14 +202,7 @@ function onSettingsSave(wkof) {
   loadVocab(updatedSettings);
 }
 
-// TODO: Hook up these stubs with their implementations
-
-const doInsertIntoPage = (wkof: WKOFSettings) => {
-  // tslint:disable-next-line:no-console
-  console.log("doInsertIntoPage");
-};
-
-const loadVocab = (wkof: WKOFSettings) => {
+const loadVocab = (wkof: IWKOFSettings) => {
   // tslint:disable-next-line:no-console
   console.log("loadVocab");
 };

@@ -1,5 +1,15 @@
 import { wordPronunciations } from "../../src/forvo/api";
 
+const fakeWkofSettings = {
+  forvo_api_key: "foo",
+  forvo_min_rating: 0,
+  forvo_username_whitelist_csv: "a,b,c",
+  show_all_wwwjdic_vocab: true,
+  show_vocab_beyond_at_top: true,
+  only_show_link_in_legend: false,
+  show_forvo_usernames: true
+};
+
 describe("wordPronunciations", () => {
   it("rejects with a response Object when xhr errors", async () => {
     expect.assertions(1);
@@ -10,7 +20,7 @@ describe("wordPronunciations", () => {
       }, 1);
     };
     await expect(
-      wordPronunciations(erroringXhrFunc, "界", { forvo_api_key: "key" })
+      wordPronunciations(erroringXhrFunc, "界", fakeWkofSettings)
     ).rejects.toEqual(res);
   });
 
@@ -23,7 +33,7 @@ describe("wordPronunciations", () => {
       }, 1);
     };
     await expect(
-      wordPronunciations(successfulXhrFunc, "界", { forvo_api_key: "key" })
+      wordPronunciations(successfulXhrFunc, "界", fakeWkofSettings)
     ).resolves.toEqual(res);
   });
 });
