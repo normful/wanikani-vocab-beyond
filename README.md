@@ -20,15 +20,11 @@ Vocab Beyond will still show WWWJDIC vocab, even if you don't configure it with 
 1. Install @rfindley 's WaniKani Open Framework according to [these instructions](https://github.com/rfindley/wanikani-open-framework#installation).
 2. Install this script from Greasyfork at https://greasyfork.org/en/scripts/372737-wanikani-vocab-beyond
 3. (Optional) Configure Vocab Beyond with your Forvo API key.
-  1. Sign up for a Forvo account at https://forvo.com/signup/
-  2. Purchase a Fovo API key at https://api.forvo.com/plans-and-pricing/
-  3. Copy your Forvo API key from https://api.forvo.com/account/
-  4. Open the Vocab Beyond settings from the menu at the top right of your [WaniKani dashboard](https://www.wanikani.com/dashboard):
-    
-      ![Settings accessed from dashboard](./screenshots/settings-accessed-from-dashboard.png)
-  5. Paste your API key into the field under the Audio settings tab:
-
-      ![Forvo API key field](./screenshots/forvo-api-key-field.png)
+    1. Sign up for a Forvo account at https://forvo.com/signup/
+    2. Purchase a Fovo API key at https://api.forvo.com/plans-and-pricing/
+    3. Copy your Forvo API key from https://api.forvo.com/account/
+    4. Open the Vocab Beyond settings from the menu at the top right of your [WaniKani dashboard](https://www.wanikani.com/dashboard): ![Settings accessed from dashboard](./screenshots/settings-accessed-from-dashboard.png)
+    5. Paste your API key into the field under the Audio settings tab: ![Forvo API key field](./screenshots/forvo-api-key-field.png)
 
 ## Settings
 
