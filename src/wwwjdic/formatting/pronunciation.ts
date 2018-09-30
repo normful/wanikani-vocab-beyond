@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 import { DICT_CODES } from "../dict_codes";
 
 // 3040-309F: hiragana
@@ -9,6 +11,8 @@ const kanjiAndCodeSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+
 const codeSplitter = /^(.*)\(([a-z,A-Z-,0-9]+)\)$/;
 
 const kanjiSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)$/;
+
+const kanjiAndParenthesizedCsvSplitter = /^([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF,]+)\)/;
 
 export function formatPronunciation(pronunciation: string): string {
   const parts = pronunciation.split(";");
@@ -26,6 +30,11 @@ export function formatPronunciation(pronunciation: string): string {
           (DICT_CODES[kcm[3]] || kcm[3]) +
           ")"
         );
+      }
+
+      const kp = part.match(kanjiAndParenthesizedCsvSplitter);
+      if (kp) {
+        return kp[1] + "⸨" + kp[2].replace(",", "、") + "⸩";
       }
 
       const cm = part.match(codeSplitter);

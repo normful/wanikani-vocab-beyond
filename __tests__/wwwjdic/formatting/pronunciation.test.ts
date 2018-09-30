@@ -32,4 +32,12 @@ describe("formatPronunciation", () => {
       "（とけい、ときはかり⸨時計⸩(outdated kana)）"
     );
   });
+
+  it("handles multiple parenthesized groups", () => {
+    expect(
+      f("いささおがわ(いささ小川,細小小川);いさらおがわ(いさら小川,細小小川)")
+    ).toEqual(
+      "（いささおがわ⸨いささ小川、細小小川⸩、いさらおがわ⸨いさら小川、細小小川⸩）"
+    );
+  });
 });
