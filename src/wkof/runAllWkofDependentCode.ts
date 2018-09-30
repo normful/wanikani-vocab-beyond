@@ -1,6 +1,6 @@
 import { Logger } from "../logger/logger";
 import { prettyScriptName } from "../appConstants";
-import { insertDOMElements } from "./../dom/insertDOMElements";
+import { insertInitialDOMElements } from "./../dom/insertInitialDOMElements";
 import { waitForWkof } from "./waitForWkof";
 import {
   MenuScriptLinkId,
@@ -18,6 +18,8 @@ interface IWKOF {
   // Using `any` here is a workaround for `Cannot use 'new' with an expression
   // whose type lacks a call or construct signature.`
   Settings: any;
+
+  settings: IWKOFSettings;
 }
 
 interface IWKOFMenuModule {
@@ -37,7 +39,7 @@ export function runAllWkofDependentCode(): void {
       });
 
       wkof.Settings.load(SettingsScriptId).then(settings => {
-        insertDOMElements(settings);
+        insertInitialDOMElements(settings);
       });
     });
   });
@@ -216,7 +218,7 @@ function onSettingsMenuLinkClick(wkof: IWKOF): void {
   dialog.open();
 }
 
-function onSettingsSave(wkof) {
+function onSettingsSave(wkof: IWKOF): void {
   const updatedSettings = wkof.settings[SettingsScriptId];
-  Log.debug("onSettingsSave NYI");
+  insertInitialDOMElements(updatedSettings);
 }

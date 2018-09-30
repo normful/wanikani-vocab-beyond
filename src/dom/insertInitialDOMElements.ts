@@ -4,12 +4,10 @@ import { PageType, determinePageType } from "./../urlHelpers/determinePageType";
 import { sectionHeaderID, sectionID } from "./domConstants";
 import { queryWwwjdicThenInsertParsedResults } from "./queryWwwjdicThenInsertParsedResults";
 
-// TODO: Rename this file to insertInitialDOMElements
-
 const Log = new Logger(false);
 
-export function insertDOMElements(settings: IWKOFSettings): void {
-  Log.debug("insertDOMElements called");
+export function insertInitialDOMElements(settings: IWKOFSettings): void {
+  Log.debug("insertInitialDOMElements called");
 
   const pageType = determinePageType(document.URL);
 
@@ -20,8 +18,14 @@ export function insertDOMElements(settings: IWKOFSettings): void {
   maybeLoadVocabDependingOnPage(pageType, settings);
 }
 
+let insertedPageListHeaderLink = false;
+
 function insertPageListHeaderLink(): void {
   Log.debug("insertPageListHeaderLink called");
+
+  if (insertedPageListHeaderLink) {
+    return;
+  }
 
   const header = $(".page-list-header");
   const listItem = $("<li>");
@@ -30,17 +34,19 @@ function insertPageListHeaderLink(): void {
 
   // Other scripts may have altered this list, so just insert this link at the end
   listItem.insertAfter(header.siblings().last());
+
+  insertedPageListHeaderLink = true;
 }
 
 function maybeLoadVocabDependingOnPage(
   pageType: PageType,
   settings: IWKOFSettings
 ): void {
+  Log.debug("maybeLoadVocabDependingOnPage called");
+
   if (pageType === PageType.other) {
     return;
   }
-
-  Log.debug("maybeLoadVocabDependingOnPage called");
 
   const optAttrs = { attributes: true };
   const optChildList = { childList: true };
@@ -109,8 +115,7 @@ function checkReviewMut(settings, mutationRecord) {
   }
 }
 
-// Creates a section for the vocab and returns a pointer to the jQuery object.
-function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): object {
+function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): JQuery {
   const pageType = determinePageType(document.URL);
 
   if ($("#" + sectionID).length === 0) {

@@ -5,27 +5,26 @@ import { determinePageType } from "./../urlHelpers/determinePageType";
 import { getKanji } from "./getKanji";
 import { makeWwwjdicUrl } from "./../wwwjdic/makeWwwjdicUrl";
 import { IRenderable, extractLines, parseLines } from "./../wwwjdic/parsing";
+import {
+  populateForvoUserWhitelist,
+  insertForvoAudioForWord
+} from "./insertForvoAudioForWord";
 
 const Log = new Logger(false);
 
 const cachedSections = {};
 
-// TODO: Turn to false later and/or move to IWKOFSettings
-const DISABLE_FORVO = true;
-
-let forvoUserWhitelist = [""];
-const EMPTY_FORVO_USER_WHITELIST = JSON.stringify(forvoUserWhitelist);
+const DISABLE_FORVO = false;
 
 export function queryWwwjdicThenInsertParsedResults(
   settings: IWKOFSettings,
-  // TODO: Fix this `any` workaround and replace it with the proper jQuery object type
-  emptySection: any
+  emptySection: JQuery
 ): void {
   Log.debug("queryWwwjdic");
 
   if (!emptySection.length) {
     Log.debug(
-      "queryWwwjdic returning early because emptySection has no elements"
+      "queryWwwjdicThenInsertParsedResults returning early because emptySection has no elements"
     );
     return;
   }
@@ -34,12 +33,14 @@ export function queryWwwjdicThenInsertParsedResults(
   const kanji = getKanji(pageType);
 
   if (!kanji) {
-    Log.error("could not get kanji");
+    Log.error("queryWwwjdicThenInsertParsedResults could not get kanji");
     return;
   }
 
   if (cachedSections[kanji]) {
-    Log.debug("queryWwwjdic reusing cachedSection and returning early");
+    Log.debug(
+      "queryWwwjdicThenInsertParsedResults reusing cachedSection and returning early"
+    );
     emptySection.replaceWith(cachedSections[kanji]);
     return;
   }
@@ -50,7 +51,7 @@ export function queryWwwjdicThenInsertParsedResults(
 
   showMessage("Loading...");
 
-  Log.debug("querying WWWJDIC for ", kanji);
+  Log.debug("Querying WWWJDIC for ", kanji);
   const wwwJdicUrl = makeWwwjdicUrl(kanji, settings);
 
   http
@@ -72,10 +73,8 @@ export function queryWwwjdicThenInsertParsedResults(
 
 function onWwwJdicResponse(
   res: string,
-  // TODO: Replace this `any`
-  section: any,
-  // TODO: Replace this `any`
-  showMessage: any,
+  section: JQuery,
+  showMessage: (message: string) => void,
   settings: IWKOFSettings,
   kanji: string
 ): void {
@@ -95,13 +94,6 @@ function onWwwJdicResponse(
   // Clear loading text
   showMessage("");
 
-  if (typeof settings.forvo_username_whitelist_csv === "string") {
-    forvoUserWhitelist = settings.forvo_username_whitelist_csv
-      .trim()
-      .replace(/ /g, "")
-      .split(",");
-  }
-
   const renderables = parseLines(lines);
 
   const maybeOnlyCommonRenderables = renderables.filter(
@@ -110,7 +102,8 @@ function onWwwJdicResponse(
         return true;
       }
 
-      return renderable.cm;
+      const isCommon = renderable.cm;
+      return isCommon;
     }
   );
 
@@ -133,6 +126,10 @@ function onWwwJdicResponse(
 
   Log.debug("WWWJDIC renderablesWithinLimit", renderablesWithinLimit);
 
+  if (!DISABLE_FORVO) {
+    populateForvoUserWhitelist(settings);
+  }
+
   const promises = renderablesWithinLimit.map(
     (renderable: IRenderable): Promise<any> => {
       const jpText = renderable.jp;
@@ -142,7 +139,7 @@ function onWwwJdicResponse(
       const vocabForQueryingForvo = renderable.q;
 
       const listItem = $("<div>");
-      listItem.css("margin-bottom", "35px");
+      listItem.css({ marginBottom: "35px" });
 
       const jpEl = $("<h3>");
 
@@ -153,13 +150,9 @@ function onWwwJdicResponse(
         span.text(codePoint);
 
         const codePointInt = codePoint.codePointAt(0);
+        span.css("font-size", shouldRenderBig(codePointInt) ? "45px" : "11px");
 
-        if (shouldRenderBig(codePointInt)) {
-          span.css("font-size", "45px");
-        } else {
-          span.css("font-size", "11px");
-        }
-
+        // Clicking on kanji opens page for it
         if (isKanjiCodePoint(codePointInt)) {
           span.on("click", () => {
             window.open(
@@ -173,8 +166,10 @@ function onWwwJdicResponse(
           });
         }
 
-        span.css("font-weight", "normal");
-        span.css("line-height", "45px");
+        span.css({
+          fontWeight: "normal",
+          lineHeight: "45px"
+        });
 
         jpEl.append(span);
       }
@@ -183,61 +178,72 @@ function onWwwJdicResponse(
         // uncommon vocab indicator
         const uc = $("<span>");
 
-        uc.text("希");
-        uc.css("position", "absolute");
-        uc.css("display", "block");
-        uc.css("font-size", "12px");
-        uc.css("height", "22px");
-        uc.css("width", "22px");
-        uc.css("top", "4px");
-        uc.css("left", "-30px");
-        uc.css("margin", "-0.6px");
-        uc.css("box-sizing", "border-box");
+        uc.text("稀");
 
-        uc.css("border-radius", "50%");
-        uc.css("text-align", "center");
-        uc.css("vertical-align", "middle");
-        uc.css("text-shadow", "0.7px 0.2px 4.1px #FFF9DE");
-        uc.css("background-color", "#E38B32");
-        uc.css(
-          "box-shadow",
-          "0 -3.5px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)"
-        );
-        uc.css("color", "#F41300");
-        uc.css("z-index", "999");
+        uc.css({
+          position: "absolute",
+          display: "block",
+          fontSize: "12px",
+          height: "22px",
+          width: "22px",
+          top: "4px",
+          left: "-30px",
+          margin: "-0.6px",
+          boxSizing: "border-box",
+          borderRadius: "50%",
+          textAlign: "center",
+          verticalAlign: "middle",
+          textShadow: "0.7px 0.2px 4.1px #FFF9DE",
+          backgroundColor: "#E38B32",
+          boxShadow:
+            "0 -3.5px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)",
+          color: "#F41300",
+          zIndex: "999"
+        });
 
         jpEl.append(uc);
       }
 
-      jpEl.css("position", "relative");
-      jpEl.css("margin-top", "20px");
-      jpEl.css("margin-right", "0");
-      jpEl.css("margin-bottom", "15px");
-      jpEl.css("margin-left", "0");
-      jpEl.css("padding", "0");
+      jpEl.css({
+        position: "relative",
+        marginTop: "20px",
+        marginRight: "0",
+        marginBottom: "15px",
+        marginLeft: "0",
+        padding: "0"
+      });
+
       listItem.append(jpEl);
 
       const enPOSEl = $("<h3>");
       enPOSEl.text(enPOSText);
-      enPOSEl.css("font-size", "20px");
-      enPOSEl.css("font-weight", "normal");
-      enPOSEl.css("line-height", "20px");
-      enPOSEl.css("padding", "0");
+      enPOSEl.css({
+        fontSize: "20px",
+        fontWeight: "normal",
+        lineHeight: "20px",
+        padding: "0"
+      });
       listItem.append(enPOSEl);
 
       definitions.forEach(definition => {
         const enDefnEl = $("<p>");
         enDefnEl.text(definition);
-        enDefnEl.css("margin", "0");
-        enDefnEl.css("padding", "0");
+        enDefnEl.css({
+          margin: "0",
+          padding: "0"
+        });
         listItem.append(enDefnEl);
       });
 
       section.append(listItem);
 
-      // if (!DISABLE_FORVO) {
-      //   return addForvoAudioForThisWordAsync(vocabForQueryingForvo, listItem, settings);
-      // }
+      if (!DISABLE_FORVO) {
+        return insertForvoAudioForWord(
+          vocabForQueryingForvo,
+          settings,
+          listItem
+        );
+      }
 
       return Promise.resolve();
     }
@@ -254,6 +260,10 @@ function onWwwJdicResponse(
     const sectionDeepClone = section.clone(true, true);
     cachedSections[kanji] = sectionDeepClone;
   });
+}
+
+function isKanjiCodePoint(codePointInt: number): boolean {
+  return codePointInt >= 19968 && codePointInt <= 40879;
 }
 
 export function shouldRenderBig(codePointInt: number): boolean {
@@ -276,8 +286,4 @@ export function shouldRenderBig(codePointInt: number): boolean {
   }
 
   return false;
-}
-
-function isKanjiCodePoint(codePointInt: number): boolean {
-  return codePointInt >= 19968 && codePointInt <= 40879;
 }
