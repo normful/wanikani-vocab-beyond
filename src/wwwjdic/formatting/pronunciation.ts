@@ -6,9 +6,9 @@ import { DICT_CODES } from "../dict_codes";
 // 30A0-30FF: katakana
 // 4E00-9FAF: common and uncommon kanji
 
-const kanjiAndCodeSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)\(([a-z,A-Z-,0-9]+)\)$/;
+const kanjiAndCodeSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)\(([a-zA-Z0-9,]+)\)$/;
 
-const codeSplitter = /^(.*)\(([a-z,A-Z-,0-9]+)\)$/;
+const codeSplitter = /^(.*)\(([a-zA-Z0-9,]+)\)$/;
 
 const kanjiSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)$/;
 
@@ -39,7 +39,16 @@ export function formatPronunciation(pronunciation: string): string {
 
       const cm = part.match(codeSplitter);
       if (cm) {
-        return cm[1] + "(" + (DICT_CODES[cm[2]] || cm[2]) + ")";
+        const code = cm[2];
+        let expandedCode = code;
+
+        if (code === "P") {
+          expandedCode = "common";
+        } else if (DICT_CODES[code]) {
+          expandedCode = DICT_CODES[code];
+        }
+
+        return cm[1] + "(" + expandedCode + ")";
       }
 
       const km = part.match(kanjiSplitter);

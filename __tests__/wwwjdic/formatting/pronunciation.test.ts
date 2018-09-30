@@ -21,6 +21,10 @@ describe("formatPronunciation", () => {
     );
   });
 
+  it("replaces P as common", () => {
+    expect(f("かわ(P);がわ")).toEqual("（かわ(common)、がわ）");
+  });
+
   it("replaces parentheses around kanji with double parentheses", () => {
     expect(f("てのひら;たなごころ(掌)")).toEqual(
       "（てのひら、たなごころ⸨掌⸩）"
