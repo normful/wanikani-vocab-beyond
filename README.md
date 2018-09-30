@@ -4,7 +4,7 @@
 
 ## Description
 
-This [WaniKani](https://www.wanikani.com) script lets you study much more vocabulary than is included in WaniKani, by showing hiragana pronunciation, definitions, part of speech, and commonality indicators for vocabulary retrieved from Jim Breen's [WWWJDIC](http://nihongo.monash.edu/cgi-bin/wwwjdic) [API](http://www.edrdg.org/wwwjdic/wwwjdicinf.html#backdoor_tag). It also allows you to listen to any native speaker pronunciations from [Forvo](https://forvo.com/) for each vocabulary word (if you pay \$24/year for a Forvo API key), and allows you to filter audio by Forvo username (and thus filter by regional dialects).
+This [WaniKani](https://www.wanikani.com) script lets you study much more vocabulary for each kanji than is included in WaniKani, by showing hiragana pronunciation, definitions, part of speech, and commonality indicators for vocabulary retrieved from Jim Breen's [WWWJDIC](http://nihongo.monash.edu/cgi-bin/wwwjdic) [API](http://www.edrdg.org/wwwjdic/wwwjdicinf.html#backdoor_tag). It also allows you to listen to any native speaker pronunciations from [Forvo](https://forvo.com/) for each vocabulary word (if you pay \$24/year for a Forvo API key), and allows you to filter audio by Forvo username (and thus filter by regional dialects).
 
 The Vocab Beyond section is rendered on kanji lessons, kanji reviews, and kanji pages.
 
