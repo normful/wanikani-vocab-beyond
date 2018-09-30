@@ -1,8 +1,8 @@
 import http from "gm-http";
 import { App } from "./src/app";
 
-const isDebug: boolean = process.env.NODE_ENV !== "production";
-http.setConfig({ debug: isDebug });
+// Set `debug: true` to enable GM.xmlHttpRequest logging
+http.setConfig({ debug: false });
 
 const app = new App();
 app.init();
