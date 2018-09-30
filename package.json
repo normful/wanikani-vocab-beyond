@@ -4,6 +4,7 @@
   "description": "Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.",
   "scripts": {
     "test": "jest",
+    "jest": "jest",
     "build": "webpack --display-error-details --progress --colors",
     "watch": "webpack --display-error-details --progress --colors --watch",
     "prettier": "prettier --parser=typescript --write 'src/**/*.ts'",
@@ -16,9 +17,13 @@
   "author": "Norman Sue",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^23.3.2",
     "@types/node": "^10.11.3",
+    "jest": "^23.6.0",
+    "jest-config": "^23.6.0",
     "moment": "^2.22.1",
     "prettier": "^1.14.3",
+    "ts-jest": "^23.10.2",
     "ts-loader": "^4.2.0",
     "ts-node": "^6.0.0",
     "tslint": "^5.11.0",
