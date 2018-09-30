@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/jest": "^23.3.2",
     "@types/jquery": "^3.3.10",
+    "@types/jstorage": "^0.3.30",
     "@types/node": "^10.11.3",
     "jest": "^23.6.0",
     "jest-config": "^23.6.0",
