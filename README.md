@@ -88,7 +88,7 @@ If you have enabled the "Show uncommon vocab" checkbox in the Vocab settings tab
 
 ## Support
 
-Post a comment in TODO or open a GitHub Issue at https://github.com/normful/wanikani-vocab-beyond
+Post a comment at https://community.wanikani.com/t/userscript-wanikani-vocab-beyond/33046 or open a GitHub Issue at https://github.com/normful/wanikani-vocab-beyond
 
 ## Contributing
 
