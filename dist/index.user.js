@@ -379,8 +379,7 @@ function onSettingsMenuLinkClick(wkof) {
     dialog.open();
 }
 function onSettingsSave(wkof) {
-    var updatedSettings = wkof.settings[wkofConstants_1.SettingsScriptId];
-    insertInitialDOMElements_1.insertInitialDOMElements(updatedSettings);
+    window.location.reload(false);
 }
 
 

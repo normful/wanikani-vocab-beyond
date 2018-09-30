@@ -55,6 +55,5 @@ function onSettingsMenuLinkClick(wkof: IWKOF): void {
 }
 
 function onSettingsSave(wkof: IWKOF): void {
-  const updatedSettings = wkof.settings[SettingsScriptId];
-  insertInitialDOMElements(updatedSettings);
+  window.location.reload(false);
 }
