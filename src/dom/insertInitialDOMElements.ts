@@ -4,12 +4,10 @@ import { PageType, determinePageType } from "./../urlHelpers/determinePageType";
 import { sectionHeaderID, sectionID } from "./domConstants";
 import { queryWwwjdicThenInsertParsedResults } from "./queryWwwjdicThenInsertParsedResults";
 
-// TODO: Rename this file to insertInitialDOMElements
-
 const Log = new Logger(false);
 
-export function insertDOMElements(settings: IWKOFSettings): void {
-  Log.debug("insertDOMElements called");
+export function insertInitialDOMElements(settings: IWKOFSettings): void {
+  Log.debug("insertInitialDOMElements called");
 
   const pageType = determinePageType(document.URL);
 
@@ -20,8 +18,14 @@ export function insertDOMElements(settings: IWKOFSettings): void {
   maybeLoadVocabDependingOnPage(pageType, settings);
 }
 
+let insertedPageListHeaderLink = false;
+
 function insertPageListHeaderLink(): void {
   Log.debug("insertPageListHeaderLink called");
+
+  if (insertedPageListHeaderLink) {
+    return;
+  }
 
   const header = $(".page-list-header");
   const listItem = $("<li>");
@@ -30,24 +34,31 @@ function insertPageListHeaderLink(): void {
 
   // Other scripts may have altered this list, so just insert this link at the end
   listItem.insertAfter(header.siblings().last());
+
+  insertedPageListHeaderLink = true;
 }
 
 function maybeLoadVocabDependingOnPage(
   pageType: PageType,
   settings: IWKOFSettings
 ): void {
+  Log.debug("maybeLoadVocabDependingOnPage called");
+
   if (pageType === PageType.other) {
+    Log.debug("maybeLoadVocabDependingOnPage returning early. PageType.other");
     return;
   }
-
-  Log.debug("maybeLoadVocabDependingOnPage called");
 
   const optAttrs = { attributes: true };
   const optChildList = { childList: true };
 
   if (pageType === PageType.kanji) {
+    Log.debug("maybeLoadVocabDependingOnPage PageType.kanji");
+
     createSectionAndRunQuery(settings);
   } else if (pageType === PageType.reviews) {
+    Log.debug("maybeLoadVocabDependingOnPage PageType.reviews");
+
     const ob = new MutationObserver(mutationRecords => {
       mutationRecords.forEach(checkReviewMut.bind(null, settings));
     });
@@ -56,6 +67,8 @@ function maybeLoadVocabDependingOnPage(
     // Item Info icon with the eye on it
     ob.observe(document.getElementById("item-info-col2"), optChildList);
   } else if (pageType === PageType.lessons) {
+    Log.debug("maybeLoadVocabDependingOnPage PageType.lessons");
+
     const obs = new MutationObserver(mutationRecords => {
       if (isKanjiLesson()) {
         createSectionAndRunQuery(settings);
@@ -82,36 +95,30 @@ function isKanjiLesson(): boolean {
   return mainInfo && mainInfo.className === "kanji";
 }
 
-function checkReviewMut(settings, mutationRecord) {
-  // mutationRecord.addedNotes is a NodeList, not an Array
+let createdSectionForKanjiReview = false;
 
-  if (mutationRecord.addedNodes.length === 0) {
-    return;
-  }
+function checkReviewMut(
+  settings: IWKOFSettings,
+  mutationRecord: MutationRecord
+): void {
+  const isKanjiReview = $("#question-type")
+    .text()
+    .toLowerCase()
+    .includes("kanji");
 
-  const childIds = [];
-
-  for (const node of mutationRecord.addedNodes.values()) {
-    childIds.push(node.id);
-  }
-
-  const isKanjiReview =
-    JSON.stringify(childIds) ===
-    JSON.stringify([
-      "item-info-meaning-mnemonic",
-      "note-meaning",
-      "item-info-reading-mnemonic",
-      "note-reading"
-    ]);
-
-  if (isKanjiReview) {
+  if (
+    ((mutationRecord.target as any).id as string).includes("item-info") &&
+    isKanjiReview &&
+    !createdSectionForKanjiReview
+  ) {
+    createdSectionForKanjiReview = true;
     createSectionAndRunQuery(settings);
   }
 }
 
-// Creates a section for the vocab and returns a pointer to the jQuery object.
-function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): object {
+function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): JQuery {
   const pageType = determinePageType(document.URL);
+  Log.debug("maybeInsertEmptyVocabSectionOnce pageType", pageType);
 
   if ($("#" + sectionID).length === 0) {
     const sectionHTML =
@@ -151,6 +158,10 @@ function maybeInsertEmptyVocabSectionOnce(settings: IWKOFSettings): object {
       } else {
         $("#supplement-kan-related-vocabulary .col1").append(sectionHTML);
       }
+    } else {
+      Log.debug(
+        "maybeInsertEmptyVocabSectionOnce not inserting because page type does not match"
+      );
     }
   }
 
