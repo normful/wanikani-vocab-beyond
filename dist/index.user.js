@@ -3,7 +3,7 @@
 // @author            Norman Sue
 // @description       Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.
 // @version           0.4.0
-// @update            9/30/2018, 3:43:49 AM
+// @update            9/30/2018, 1:15:10 PM
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
@@ -912,16 +912,17 @@ function onWwwJdicResponse(res, section, showMessage, settings, kanji) {
                 fontSize: "12px",
                 height: "22px",
                 width: "22px",
-                top: "4px",
-                left: "-30px",
-                margin: "-0.6px",
+                top: "0",
+                left: "-25px",
+                margin: "0",
+                padding: "0",
                 boxSizing: "border-box",
                 borderRadius: "50%",
                 textAlign: "center",
-                verticalAlign: "middle",
+                lineHeight: "22px",
                 textShadow: "0.7px 0.2px 4.1px #FFF9DE",
                 backgroundColor: "#E38B32",
-                boxShadow: "0 -3.5px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)",
+                boxShadow: "0 -3px 0 rgba(0,0,0,0.2) inset, 0 0 10px rgba(255,255,255,0.5)",
                 color: "#F41300",
                 zIndex: "999"
             });
@@ -1118,15 +1119,10 @@ function parseLines(lines) {
             definitions.push(definition_line_1.formatDefinitionLine(english));
         }
         return {
-            // Japanese text header, formatted, with WWWJDIC dictionary codes expanded
             jp: vocab_header_1.formatVocabHeader(vocabHeader),
-            // Part of speech, fully expanded
             pos: part_of_speech_1.formatPartOfSpeech(partOfSpeech),
-            // Boolean indicating whether it is a common entry or not
             cm: isCommon,
-            // Array of English definition lines, with WWWJDIC dictionary codes expanded
             en: definitions,
-            // The first-listed vocabulary to query Forvo with
             q: extractVocab(vocabHeader)
         };
     });
@@ -1395,14 +1391,16 @@ exports.DICT_CODES = {
 
 "use strict";
 
+/* tslint:disable:no-console */
 Object.defineProperty(exports, "__esModule", { value: true });
 var dict_codes_1 = __webpack_require__(15);
 // 3040-309F: hiragana
 // 30A0-30FF: katakana
 // 4E00-9FAF: common and uncommon kanji
-var kanjiAndCodeSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)\(([a-z,A-Z-,0-9]+)\)$/;
-var codeSplitter = /^(.*)\(([a-z,A-Z-,0-9]+)\)$/;
+var kanjiAndCodeSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)\(([a-zA-Z0-9,]+)\)$/;
+var codeSplitter = /^(.*)\(([a-zA-Z0-9,]+)\)$/;
 var kanjiSplitter = /^(.*)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\)$/;
+var kanjiAndParenthesizedCsvSplitter = /^([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)\(([\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF,]+)\)/;
 function formatPronunciation(pronunciation) {
     var parts = pronunciation.split(";");
     var mapped = parts
@@ -1417,9 +1415,21 @@ function formatPronunciation(pronunciation) {
                 (dict_codes_1.DICT_CODES[kcm[3]] || kcm[3]) +
                 ")");
         }
+        var kp = part.match(kanjiAndParenthesizedCsvSplitter);
+        if (kp) {
+            return kp[1] + "⸨" + kp[2].replace(",", "、") + "⸩";
+        }
         var cm = part.match(codeSplitter);
         if (cm) {
-            return cm[1] + "(" + (dict_codes_1.DICT_CODES[cm[2]] || cm[2]) + ")";
+            var code = cm[2];
+            var expandedCode = code;
+            if (code === "P") {
+                expandedCode = "common";
+            }
+            else if (dict_codes_1.DICT_CODES[code]) {
+                expandedCode = dict_codes_1.DICT_CODES[code];
+            }
+            return cm[1] + "(" + expandedCode + ")";
         }
         var km = part.match(kanjiSplitter);
         if (km) {
