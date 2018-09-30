@@ -1,7 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const moment = require('moment');
-
 const pkg = require('./package.json');
 
 module.exports = {
@@ -15,35 +13,24 @@ module.exports = {
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.coffee', '.js', '.ts'],
+    extensions: ['.js', '.ts'],
   },
   module: {
     rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }],
   },
-  mode: 'development',
+  mode: 'none',
+  optimization: {
+    minimize: false,
+    concatenateModules: true,
+  },
   plugins: [
-    new webpack.DefinePlugin(
-      (() => {
-        const result = { 'process.env.NODE_ENV': '"development"' };
-        for (const key in process.env) {
-          if (process.env.hasOwnProperty(key)) {
-            result['process.env.' + key] = JSON.stringify(process.env[key]);
-          }
-        }
-        return result;
-      })()
-    ),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false,
-    }),
     new webpack.BannerPlugin({
       banner: `// ==UserScript==
 // @name              WaniKani Vocab Beyond
 // @author            ${pkg.author}
 // @description       ${pkg.description}
 // @version           ${pkg.version}
-// @update            ${moment().format('YYYY-MM-DD HH:mm:ss')}
+// @update            ${new Date().toLocaleString()}
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
