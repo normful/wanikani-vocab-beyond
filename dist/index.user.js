@@ -3,7 +3,7 @@
 // @author            Norman Sue
 // @description       Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.
 // @version           0.4.0
-// @update            9/30/2018, 2:42:14 AM
+// @update            9/30/2018, 3:43:49 AM
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
@@ -625,14 +625,17 @@ function insertPageListHeaderLink() {
 function maybeLoadVocabDependingOnPage(pageType, settings) {
     Log.debug("maybeLoadVocabDependingOnPage called");
     if (pageType === determinePageType_1.PageType.other) {
+        Log.debug("maybeLoadVocabDependingOnPage returning early. PageType.other");
         return;
     }
     var optAttrs = { attributes: true };
     var optChildList = { childList: true };
     if (pageType === determinePageType_1.PageType.kanji) {
+        Log.debug("maybeLoadVocabDependingOnPage PageType.kanji");
         createSectionAndRunQuery(settings);
     }
     else if (pageType === determinePageType_1.PageType.reviews) {
+        Log.debug("maybeLoadVocabDependingOnPage PageType.reviews");
         var ob = new MutationObserver(function (mutationRecords) {
             mutationRecords.forEach(checkReviewMut.bind(null, settings));
         });
@@ -641,6 +644,7 @@ function maybeLoadVocabDependingOnPage(pageType, settings) {
         ob.observe(document.getElementById("item-info-col2"), optChildList);
     }
     else if (pageType === determinePageType_1.PageType.lessons) {
+        Log.debug("maybeLoadVocabDependingOnPage PageType.lessons");
         var obs = new MutationObserver(function (mutationRecords) {
             if (isKanjiLesson()) {
                 createSectionAndRunQuery(settings);
@@ -664,29 +668,22 @@ function isKanjiLesson() {
     var mainInfo = document.getElementById("main-info");
     return mainInfo && mainInfo.className === "kanji";
 }
+var createdSectionForKanjiReview = false;
 function checkReviewMut(settings, mutationRecord) {
-    // mutationRecord.addedNotes is a NodeList, not an Array
-    if (mutationRecord.addedNodes.length === 0) {
-        return;
-    }
-    var childIds = [];
-    for (var _i = 0, _a = mutationRecord.addedNodes.values(); _i < _a.length; _i++) {
-        var node = _a[_i];
-        childIds.push(node.id);
-    }
-    var isKanjiReview = JSON.stringify(childIds) ===
-        JSON.stringify([
-            "item-info-meaning-mnemonic",
-            "note-meaning",
-            "item-info-reading-mnemonic",
-            "note-reading"
-        ]);
-    if (isKanjiReview) {
+    var isKanjiReview = $("#question-type")
+        .text()
+        .toLowerCase()
+        .includes("kanji");
+    if (mutationRecord.target.id.includes("item-info") &&
+        isKanjiReview &&
+        !createdSectionForKanjiReview) {
+        createdSectionForKanjiReview = true;
         createSectionAndRunQuery(settings);
     }
 }
 function maybeInsertEmptyVocabSectionOnce(settings) {
     var pageType = determinePageType_1.determinePageType(document.URL);
+    Log.debug("maybeInsertEmptyVocabSectionOnce pageType", pageType);
     if ($("#" + domConstants_1.sectionID).length === 0) {
         var sectionHTML = "<section>" +
             '<h2 id="' +
@@ -724,6 +721,9 @@ function maybeInsertEmptyVocabSectionOnce(settings) {
             else {
                 $("#supplement-kan-related-vocabulary .col1").append(sectionHTML);
             }
+        }
+        else {
+            Log.debug("maybeInsertEmptyVocabSectionOnce not inserting because page type does not match");
         }
     }
     return $("#" + domConstants_1.sectionID);
@@ -835,6 +835,7 @@ function queryWwwjdicThenInsertParsedResults(settings, emptySection) {
     });
 }
 exports.queryWwwjdicThenInsertParsedResults = queryWwwjdicThenInsertParsedResults;
+var appendedForvoAttribution = false;
 function onWwwJdicResponse(res, section, showMessage, settings, kanji) {
     Log.debug("raw res", res);
     var lines = parsing_1.extractLines(res);
@@ -960,9 +961,10 @@ function onWwwJdicResponse(res, section, showMessage, settings, kanji) {
         return Promise.resolve();
     });
     Promise.all(promises).then(function () {
-        if (!DISABLE_FORVO) {
+        if (!DISABLE_FORVO && !appendedForvoAttribution) {
             var forvoAttribution = $('<p><a href="https://forvo.com/" target="_blank">Pronunciations by Forvo</a></p>');
             section.append(forvoAttribution);
+            appendedForvoAttribution = true;
         }
         var sectionDeepClone = section.clone(true, true);
         cachedSections[kanji] = sectionDeepClone;
