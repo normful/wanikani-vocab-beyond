@@ -9,7 +9,8 @@
     "build": "webpack --display-error-details --progress --colors",
     "watch": "webpack --display-error-details --progress --colors --watch",
     "prettier": "prettier --parser=typescript --write '**/*.ts'",
-    "lint": "tslint --config tslint.json --project tsconfig.json"
+    "lint": "tslint --config tslint.json --project tsconfig.json",
+    "release": "release-it"
   },
   "keywords": [
     "typescript",
@@ -25,6 +26,7 @@
     "jest": "^23.6.0",
     "jest-config": "^23.6.0",
     "prettier": "^1.14.3",
+    "release-it": "^7.6.1",
     "ts-jest": "^23.10.2",
     "ts-loader": "^4.2.0",
     "ts-node": "^6.0.0",
