@@ -7,7 +7,7 @@ export interface IWKOFSettings {
   forvo_username_whitelist_csv: string;
   show_all_wwwjdic_vocab: boolean;
   max_wwwjdic_vocab_shown: number;
-  show_vocab_beyond_at_top: boolean;
+  show_vocab_beyond_first: boolean;
   show_forvo_usernames: boolean;
   hide_uncommon_indicator: boolean;
 }
@@ -136,7 +136,7 @@ export const WkofSettingsMenuConfig = {
             "<p>Check the box below to display the Vocab Beyond section at the top of the page, instead of the bottom.</p>"
         },
 
-        show_vocab_beyond_at_top: {
+        show_vocab_beyond_first: {
           type: "checkbox",
           label: "Show Vocab Beyond at top",
           hover_tip:
