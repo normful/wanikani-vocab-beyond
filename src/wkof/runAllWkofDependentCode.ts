@@ -1,6 +1,10 @@
 import { prettyScriptName } from "../appConstants";
 import { waitForWkof } from "./waitForWkof";
-import { MenuScriptLinkId, SettingsScriptId } from "./wkofConstants";
+import {
+  MenuScriptLinkId,
+  SettingsScriptId,
+  WKOFSettings
+} from "./wkofConstants";
 
 interface IWKOF {
   include: (modulesCsv: string) => void;
@@ -15,8 +19,6 @@ interface IWKOF {
 interface IWKOFMenuModule {
   insert_script_link: (opts: object) => void;
 }
-
-type WKOFSettings = object;
 
 export function runAllWkofDependentCode(): void {
   waitForWkof(prettyScriptName, (wkof: IWKOF) => {
