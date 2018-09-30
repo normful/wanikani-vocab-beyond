@@ -1,13 +1,14 @@
-TODO
+# WaniKani Vocab Beyond
 
-This project uses code from 
+## Description
 
-https://github.com/axetroy/ts-gmscript-boilerplate
-https://github.com/axetroy/anti-redirect
+## Requirements
 
-and relies on
+## Installation
 
-https://github.com/axetroy/gm-http
+## Usage
+
+## Screenshots
 
 ## Development Commands
 
@@ -17,3 +18,7 @@ yarn lint
 yarn prettier
 yarn test
 ```
+
+## Credits
+
+This project copies some code from https://github.com/axetroy/ts-gmscript-boilerplate , https://github.com/axetroy/anti-redirect and relies on https://github.com/axetroy/gm-http
