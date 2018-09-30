@@ -1,13 +1,12 @@
+import { Logger } from "../logger/logger";
 import { IWKOFSettings } from "../wkof/wkofConstants";
 import { PageType, determinePageType } from "./../urlHelpers/determinePageType";
-import { sectionHeaderID, sectionID } from "./domIDs";
-import { Logger } from "../logger/logger";
+import { sectionHeaderID, sectionID } from "./domConstants";
+import { queryWwwjdicThenInsertParsedResults } from "./queryWwwjdicThenInsertParsedResults";
+
+// TODO: Rename this file to insertInitialDOMElements
 
 const Log = new Logger(false);
-
-const queryWwwjdic = (settings: IWKOFSettings) => {
-  Log.debug("queryWwwjdic called");
-};
 
 export function insertDOMElements(settings: IWKOFSettings): void {
   Log.debug("insertDOMElements called");
@@ -46,10 +45,8 @@ function maybeLoadVocabDependingOnPage(
   const optAttrs = { attributes: true };
   const optChildList = { childList: true };
 
-  let section;
-
   if (pageType === PageType.kanji) {
-    section = createSectionAndRunQuery(settings);
+    createSectionAndRunQuery(settings);
   } else if (pageType === PageType.reviews) {
     const ob = new MutationObserver(mutationRecords => {
       mutationRecords.forEach(checkReviewMut.bind(null, settings));
@@ -61,7 +58,7 @@ function maybeLoadVocabDependingOnPage(
   } else if (pageType === PageType.lessons) {
     const obs = new MutationObserver(mutationRecords => {
       if (isKanjiLesson()) {
-        section = createSectionAndRunQuery(settings);
+        createSectionAndRunQuery(settings);
       } else {
         Log.debug("not doing anything because not kanji lesson");
       }
@@ -75,10 +72,9 @@ function maybeLoadVocabDependingOnPage(
   }
 }
 
-function createSectionAndRunQuery(settings: IWKOFSettings): object {
+function createSectionAndRunQuery(settings: IWKOFSettings): void {
   const emptySection = maybeInsertEmptyVocabSectionOnce(settings);
-  queryWwwjdic(settings);
-  return emptySection;
+  queryWwwjdicThenInsertParsedResults(settings, emptySection);
 }
 
 function isKanjiLesson(): boolean {
@@ -109,7 +105,7 @@ function checkReviewMut(settings, mutationRecord) {
     ]);
 
   if (isKanjiReview) {
-    const section = createSectionAndRunQuery(settings);
+    createSectionAndRunQuery(settings);
   }
 }
 

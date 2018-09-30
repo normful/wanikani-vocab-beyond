@@ -6,8 +6,9 @@ const fakeWkofSettings = {
   forvo_username_whitelist_csv: "a,b,c",
   show_all_wwwjdic_vocab: true,
   show_vocab_beyond_at_top: true,
-  only_show_link_in_legend: false,
-  show_forvo_usernames: true
+  max_wwwjdic_vocab_shown: 10,
+  show_forvo_usernames: true,
+  hide_uncommon_indicator: true
 };
 
 describe("wordPronunciations", () => {
