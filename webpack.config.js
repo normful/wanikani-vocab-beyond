@@ -48,6 +48,8 @@ module.exports = {
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
 // @namespace         https://greasyfork.org/en/users/56591-normful
+// @connect           nihongo.monash.edu
+// @connect           apifree.forvo.com
 // @license           The MIT License (MIT); http://opensource.org/licenses/MIT
 // ==/UserScript==
 
