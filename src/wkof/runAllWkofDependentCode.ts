@@ -8,7 +8,7 @@ import {
   IWKOFSettings
 } from "./wkofConstants";
 
-const Log = new Logger(false);
+const Log = new Logger();
 
 interface IWKOF {
   include: (modulesCsv: string) => void;

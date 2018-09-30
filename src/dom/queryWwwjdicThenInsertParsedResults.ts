@@ -10,7 +10,7 @@ import {
   insertForvoAudioForWord
 } from "./insertForvoAudioForWord";
 
-const Log = new Logger(false);
+const Log = new Logger();
 
 const cachedSections = {};
 

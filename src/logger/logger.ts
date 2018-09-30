@@ -6,9 +6,9 @@ export class Logger {
   private prefix: string;
   private disableLogging: boolean;
 
-  constructor(disableLogging: boolean) {
+  constructor() {
     this.prefix = logPrefix;
-    this.disableLogging = disableLogging;
+    this.disableLogging = true;
   }
 
   public debug(msg: string, ...args: any[]) {

@@ -2,7 +2,7 @@ import { Logger } from "../logger/logger";
 import { IWKOFSettings } from "../wkof/wkofConstants";
 import { getWordPronunciations } from "../forvo/getWordPronunciations";
 
-const Log = new Logger(false);
+const Log = new Logger();
 
 let forvoUserWhitelist = [""];
 const EMPTY_FORVO_USER_WHITELIST = JSON.stringify(forvoUserWhitelist);

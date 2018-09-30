@@ -4,7 +4,7 @@ import { PageType, determinePageType } from "./../urlHelpers/determinePageType";
 import { sectionHeaderID, sectionID } from "./domConstants";
 import { queryWwwjdicThenInsertParsedResults } from "./queryWwwjdicThenInsertParsedResults";
 
-const Log = new Logger(false);
+const Log = new Logger();
 
 export function insertInitialDOMElements(settings: IWKOFSettings): void {
   Log.debug("insertInitialDOMElements called");
