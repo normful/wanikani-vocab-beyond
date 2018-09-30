@@ -1,0 +1,10 @@
+{
+  "src/*.ts": {
+    "alternate": "__tests__/{}.test.ts",
+    "type": "source"
+  },
+  "__tests__/*.test.ts": {
+    "alternate": "src/{}.ts",
+    "type": "test"
+  }
+}
