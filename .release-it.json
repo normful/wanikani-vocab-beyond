@@ -22,7 +22,7 @@
     "push": true,
     "pushArgs": "",
     "pushRepo": "origin",
-    "beforeStartCommand": false,
+    "beforeStartCommand": "yarn build && yarn lint && yarn prettier && yarn test",
     "afterReleaseCommand": false,
     "addUntrackedFiles": false
   },
