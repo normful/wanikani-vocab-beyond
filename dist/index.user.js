@@ -2,8 +2,8 @@
 // @name              WaniKani Vocab Beyond
 // @author            Norman Sue
 // @description       Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.
-// @version           0.4.1
-// @update            9/30/2018, 3:16:24 PM
+// @version           0.4.0
+// @update            9/30/2018, 12:21:11 PM
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
@@ -363,8 +363,8 @@ function runAllWkofDependentCode() {
         wkof.ready("Menu,Settings").then(function () {
             wkof.Menu.insert_script_link({
                 name: wkofConstants_1.MenuScriptLinkId,
-                submenu: "Vocab Beyond",
-                title: "Settings",
+                submenu: "Settings",
+                title: "Vocab Beyond",
                 on_click: onSettingsMenuLinkClick.bind(null, wkof)
             });
             wkof.Settings.load(wkofConstants_1.SettingsScriptId).then(function (settings) {
