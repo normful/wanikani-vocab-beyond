@@ -34,8 +34,8 @@ export function runAllWkofDependentCode(): void {
     wkof.ready("Menu,Settings").then(() => {
       wkof.Menu.insert_script_link({
         name: MenuScriptLinkId,
-        submenu: "Vocab Beyond",
-        title: "Settings",
+        submenu: "Settings",
+        title: "Vocab Beyond",
         on_click: onSettingsMenuLinkClick.bind(null, wkof)
       });
 
