@@ -3,7 +3,7 @@
 // @author            Norman Sue
 // @description       Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.
 // @version           0.5.2
-// @update            9/30/2018, 9:17:04 PM
+// @update            9/30/2018, 9:18:26 PM
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
