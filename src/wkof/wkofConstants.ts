@@ -133,7 +133,7 @@ export const WkofSettingsMenuConfig = {
         appearance_instructions_1: {
           type: "html",
           html:
-            "<p>Check to show Vocab Beyond at top of kanji pages and in first tab of kanji reviews and lessons.</p>"
+            "<p>Check to show Vocab Beyond at top of kanji pages and in the first tab of kanji reviews and lessons.</p>"
         },
 
         show_vocab_beyond_first: {
