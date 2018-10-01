@@ -1,6 +1,6 @@
 {
   "name": "wanikani-vocab-beyond",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.",
   "scripts": {
     "test": "jest",
