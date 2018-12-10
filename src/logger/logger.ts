@@ -8,7 +8,7 @@ export class Logger {
 
   constructor() {
     this.prefix = logPrefix;
-    this.disableLogging = true; // Set to false for development
+    this.disableLogging = false; // Set to false for development
   }
 
   public debug(msg: string, ...args: any[]) {
