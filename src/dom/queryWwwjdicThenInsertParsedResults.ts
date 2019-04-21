@@ -92,7 +92,7 @@ function onWwwJdicResponse(
   settings: IWKOFSettings,
   kanji: string
 ): void {
-  Log.debug("raw res", res);
+  Log.debug("onWwwJdicResponse raw res", res);
 
   const lines = extractLines(res);
 
