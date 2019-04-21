@@ -2,8 +2,8 @@
 // @name              WaniKani Vocab Beyond
 // @author            Norman Sue
 // @description       Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.
-// @version           0.5.2
-// @update            9/30/2018, 9:18:26 PM
+// @version           0.6.0
+// @update            4/20/2019, 11:41:55 PM
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
@@ -665,7 +665,15 @@ var parsing_1 = __webpack_require__(12);
 var insertForvoAudioForWord_1 = __webpack_require__(19);
 var Log = new logger_1.Logger();
 var cachedSections = {};
-var DISABLE_FORVO = false;
+var DISABLE_FORVO_DEFAULT = false;
+function shouldDisableForvo(settings) {
+    var retVal = DISABLE_FORVO_DEFAULT;
+    if (!settings.forvo_api_key || settings.forvo_api_key === "") {
+        retVal = true;
+    }
+    Log.debug("shouldDisableForvo", retVal);
+    return retVal;
+}
 function queryWwwjdicThenInsertParsedResults(settings, emptySection) {
     Log.debug("queryWwwjdic");
     if (!emptySection.length) {
@@ -702,7 +710,7 @@ function queryWwwjdicThenInsertParsedResults(settings, emptySection) {
 exports.queryWwwjdicThenInsertParsedResults = queryWwwjdicThenInsertParsedResults;
 var appendedForvoAttribution = false;
 function onWwwJdicResponse(res, section, showMessage, settings, kanji) {
-    Log.debug("raw res", res);
+    Log.debug("onWwwJdicResponse raw res", res);
     var lines = parsing_1.extractLines(res);
     if (lines.length === 0) {
         showMessage(settings.show_all_wwwjdic_vocab
@@ -729,7 +737,8 @@ function onWwwJdicResponse(res, section, showMessage, settings, kanji) {
     var renderablesWithinLimit = maybeOnlyCommonRenderables.slice(0, sliceEnd);
     Log.debug("WWWJDIC renderablesWithinLimit.length", renderablesWithinLimit.length);
     Log.debug("WWWJDIC renderablesWithinLimit", renderablesWithinLimit);
-    if (!DISABLE_FORVO) {
+    var disableForvo = shouldDisableForvo(settings);
+    if (!disableForvo) {
         insertForvoAudioForWord_1.populateForvoUserWhitelist(settings);
     }
     var promises = renderablesWithinLimit.map(function (renderable) {
@@ -821,13 +830,13 @@ function onWwwJdicResponse(res, section, showMessage, settings, kanji) {
             listItem.append(enDefnEl);
         });
         section.append(listItem);
-        if (!DISABLE_FORVO) {
+        if (!disableForvo) {
             return insertForvoAudioForWord_1.insertForvoAudioForWord(vocabForQueryingForvo, settings, listItem);
         }
         return Promise.resolve();
     });
     Promise.all(promises).then(function () {
-        if (!DISABLE_FORVO && !appendedForvoAttribution) {
+        if (!disableForvo && !appendedForvoAttribution) {
             var forvoAttribution = $('<p><a href="https://forvo.com/" target="_blank">Pronunciations by Forvo</a></p>');
             section.append(forvoAttribution);
             appendedForvoAttribution = true;
@@ -1649,6 +1658,7 @@ exports.WkofSettingsMenuConfig = {
                 },
                 forvo_api_key: {
                     type: "text",
+                    default: "",
                     label: "Forvo API key",
                     full_width: true,
                     hover_tip: "Your API key from https://api.forvo.com/"
