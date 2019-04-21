@@ -35,6 +35,7 @@ export const WkofSettingsMenuConfig = {
 
         forvo_api_key: {
           type: "text",
+          default: "",
           label: "Forvo API key",
           full_width: true,
           hover_tip: "Your API key from https://api.forvo.com/"

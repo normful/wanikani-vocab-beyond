@@ -14,7 +14,19 @@ const Log = new Logger();
 
 const cachedSections = {};
 
-const DISABLE_FORVO = false;
+const DISABLE_FORVO_DEFAULT = false;
+
+function shouldDisableForvo(settings: IWKOFSettings): boolean {
+  let retVal = DISABLE_FORVO_DEFAULT;
+
+  if (!settings.forvo_api_key || settings.forvo_api_key === "") {
+    retVal = true;
+  }
+
+  Log.debug("shouldDisableForvo", retVal);
+
+  return retVal;
+}
 
 export function queryWwwjdicThenInsertParsedResults(
   settings: IWKOFSettings,
@@ -128,7 +140,9 @@ function onWwwJdicResponse(
 
   Log.debug("WWWJDIC renderablesWithinLimit", renderablesWithinLimit);
 
-  if (!DISABLE_FORVO) {
+  const disableForvo = shouldDisableForvo(settings);
+
+  if (!disableForvo) {
     populateForvoUserWhitelist(settings);
   }
 
@@ -240,7 +254,7 @@ function onWwwJdicResponse(
 
       section.append(listItem);
 
-      if (!DISABLE_FORVO) {
+      if (!disableForvo) {
         return insertForvoAudioForWord(
           vocabForQueryingForvo,
           settings,
@@ -253,7 +267,7 @@ function onWwwJdicResponse(
   );
 
   Promise.all(promises).then(() => {
-    if (!DISABLE_FORVO && !appendedForvoAttribution) {
+    if (!disableForvo && !appendedForvoAttribution) {
       const forvoAttribution = $(
         '<p><a href="https://forvo.com/" target="_blank">Pronunciations by Forvo</a></p>'
       );
