@@ -113,6 +113,12 @@ In development, you might also want to:
 - enable [WKVB logging](https://github.com/normful/wanikani-vocab-beyond/blob/master/src/logger/logger.ts#L11)
 - enable [`gm-http` logging](https://github.com/normful/wanikani-vocab-beyond/blob/master/index.ts#L4-L5)
 
+## Publishing
+
+(Notes to self): For releasing a new version:
+
+- run [`release-it`](https://github.com/release-it/release-it)
+
 ## Credits
 
 Thanks @rfindley and @axetroy for the following projects that this script heavily relies on:
