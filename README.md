@@ -119,6 +119,8 @@ In development, you might also want to:
 
 - run [`release-it`](https://github.com/release-it/release-it)
 
+https://greasyfork.org/en/scripts/372737-wanikani-vocab-beyond/admin is already configured to pull from GitHub, but you can press the `Update and sync now` button if you're impatient.
+
 ## Credits
 
 Thanks @rfindley and @axetroy for the following projects that this script heavily relies on:
