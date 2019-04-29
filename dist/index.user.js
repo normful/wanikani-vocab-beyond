@@ -3,7 +3,7 @@
 // @author            Norman Sue
 // @description       Shows WWWJDIC vocab with Forvo audio for each kanji in lessons, reviews, and kanji pages. A paid Forvo API key is required for audio.
 // @version           0.6.0
-// @update            4/20/2019, 11:41:55 PM
+// @update            4/28/2019, 7:24:38 PM
 // @grant             GM_xmlhttpRequest
 // @include           https://www.wanikani.com/*
 // @run-at            document-start
@@ -110,7 +110,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var gm_http_1 = __webpack_require__(1);
 var app_1 = __webpack_require__(2);
 // Set `debug: true` to enable GM.xmlHttpRequest logging
-gm_http_1.default.setConfig({ debug: false });
+gm_http_1.default.setConfig({ debug: true });
 var app = new app_1.App();
 app.init();
 
@@ -395,7 +395,7 @@ var logPrefix = "[WKVB] ";
 var Logger = /** @class */ (function () {
     function Logger() {
         this.prefix = logPrefix;
-        this.disableLogging = true; // Set to false for development
+        this.disableLogging = false; // Set to false for development
     }
     Logger.prototype.debug = function (msg) {
         var args = [];
